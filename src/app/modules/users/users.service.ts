@@ -28,18 +28,37 @@ const getAllUsersFromDB = async (query: Record<string, unknown>) => {
     }
 }
 const findUserGiveToken = async (email: string) => {
-    const isExist = await Users.findOne({ email })
-    if (!isExist) {
-        throw new AppError(httpStatus.NOT_FOUND, "User is not Exist")
+    console.log({ email });
+    const isExist = await Users.findOne({ email: email })
+    let token
+    if (isExist) {
+        const t = jwt.sign({ email: isExist.email, role: isExist.role }, config.privateKey as string, { expiresIn: '1d' })
+        token = t
     }
-    const token = jwt.sign({ email: isExist.email, role: isExist.role }, config.privateKey as string, { expiresIn: '1d' })
+    else {
+        const result = await Users.create({ email })
+        if (result) {
+            const isExist = await Users.findOne({ email: email })
+            if (isExist) {
+                const t = jwt.sign({ email: isExist.email, role: isExist.role }, config.privateKey as string, { expiresIn: '1d' })
+                token = t
+            }
+        }
+    }
+
+
     return { token }
+}
+const updateUserFromDB = async (payload: { role: string }, id: string) => {
+    const result = await Users.findByIdAndUpdate(id, { $set: { role: payload.role } })
+    return result
 }
 
 
 export const userServices = {
     createUsersIntoDB,
     getAllUsersFromDB,
-    findUserGiveToken
+    findUserGiveToken,
+    updateUserFromDB
 }
 

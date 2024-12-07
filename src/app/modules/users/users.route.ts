@@ -10,7 +10,8 @@ const router = Router()
 
 router.post('/create-user', validateRequest(userValidations.userValidationSchema), userControllers.createUsers)
 router.get('/', userControllers.getAllUsers)
-router.get('/get-token', validateRequest(userValidations.jwtValidationSchema), userControllers.findUserGiveToken)
+router.post('/get-token', validateRequest(userValidations.jwtValidationSchema), userControllers.findUserGiveToken)
+router.patch('/:id', userControllers.updateUser)
 
 
 export const userRouters = router 

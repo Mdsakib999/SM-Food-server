@@ -37,9 +37,21 @@ const findUserGiveToken = catchAsync(async (req: Request, res: Response) => {
         data: result
     })
 })
+const updateUser = catchAsync(async (req: Request, res: Response) => {
+    const data = req.body
+    const { id } = req.params
+    const result = await userServices.updateUserFromDB(data, id)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User Update succesfully',
+        data: result
+    })
+})
 
 export const userControllers = {
     createUsers,
     getAllUsers,
-    findUserGiveToken
+    findUserGiveToken,
+    updateUser
 }
