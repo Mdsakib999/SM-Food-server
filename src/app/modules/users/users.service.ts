@@ -18,6 +18,11 @@ const createUsersIntoDB = async (payload: TUsers) => {
     return result
 }
 
+const getMeFromDB = async (email: string) => {
+    const result = await Users.findOne({ email })
+    return result
+}
+
 const getAllUsersFromDB = async (query: Record<string, unknown>) => {
     const userQuery = new QueryBuilder(Users.find(), query).search(["email"]).filter().sort().paginate().fields()
     const meta = await userQuery.countTotal()
@@ -59,6 +64,7 @@ export const userServices = {
     createUsersIntoDB,
     getAllUsersFromDB,
     findUserGiveToken,
-    updateUserFromDB
+    updateUserFromDB,
+    getMeFromDB
 }
 

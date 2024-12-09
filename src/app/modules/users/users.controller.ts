@@ -17,6 +17,16 @@ const createUsers = catchAsync(async (req: Request, res: Response) => {
         data: result
     })
 })
+const getMe = catchAsync(async (req: Request, res: Response) => {
+    const { email } = req.params
+    const result = await userServices.getMeFromDB(email)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Get me succesfully',
+        data: result
+    })
+})
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     const query = req.query
     const result = await userServices.getAllUsersFromDB(query)
@@ -53,5 +63,6 @@ export const userControllers = {
     createUsers,
     getAllUsers,
     findUserGiveToken,
-    updateUser
+    updateUser,
+    getMe
 }
