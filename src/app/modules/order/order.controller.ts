@@ -37,11 +37,34 @@ const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
         data: result
     })
 })
+const deleteOrder = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params
+    const result = await orderServices.deleteOrderFromDB(id)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: ' Delete Order succesfully',
+        data: result
+    })
+})
+const getOrderForUser = catchAsync(async (req: Request, res: Response) => {
+    const query = req.query
+    const email = req.user.email
+    const result = await orderServices.getOrderForUserFromDB(email, query)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: ' Delete Order succesfully',
+        data: result
+    })
+})
 
 
 
 export const orderControllers = {
     createOrder,
     getAllOrder,
-    updateOrderStatus
+    updateOrderStatus,
+    deleteOrder,
+    getOrderForUser
 }
